@@ -37,12 +37,28 @@ When(/^I send a workspace (POST) request with the json$/) do |method, json_text|
     WorkspaceRequest.delete_workspace(@client,"DELETE",$workspace.id)
 end
 
+
 # NEGATIVES
 When(/^I send a workspace (GET) request for a workspace (.*?)$/) do |method, id_no_exist|
   @http_response, @WorkspaceError = WorkspaceRequest.get_workspace_by_id(@client, method, id_no_exist)
 
 end
 
+When(/^I send a workspace negative (POST) with the json$/) do |method, json_text|
+  @json_value = json_text
+  @http_response, @WorkspaceError = WorkspaceRequest.create_workspace(@client, method, json_text)
+  @json_response = JSON.parse(@http_response.body)
+end
+
+When(/^I send a workspace negative (PUT) with (.*?) workspace id and with the json$/) do |method, invalid_id, json_text|
+  @json_value = json_text
+  @http_response, @WorkspaceError = WorkspaceRequest.update_workspace(@client, method, invalid_id, json_text)
+  @json_response = JSON.parse(@http_response.body)
+end
+When(/^I send a workspace (DELETE) request with the wrong workspace id (.*?)$/) do |method, wrong_id|
+  @http_response, @WorkspaceError = WorkspaceRequest.delete_workspace(@client, method, wrong_id)
+
+end
 
 
 And(/^I expect the all inserted data workspace are the same$/) do
@@ -71,23 +87,22 @@ And(/^I expect the all data type returned from workspace request are correct$/) 
 end
 
 
-
 And(/^I expect an error message from workspace$/) do
   @json_response = JSON.parse(@http_response.body)
   expect(@json_response["error"]).to eql(@WorkspaceError.error.to_s)
 end
-# And(/^I expect the project error message (.*)$/) do |message|
-#   expect(@ProjectError.error.to_s).to eql(message.to_s)
-# end
-# And(/^I expect the project error code (.*)$/) do |message|
-#   expect(@ProjectError.code.to_s).to eql(message.to_s)
-# end
-# And(/^I expect the project error kind (.*)$/) do |message|
-#   expect(@ProjectError.kind.to_s).to eql(message.to_s)
-# end
-# And(/^I expect the project error general problem (.*)$/) do |message|
-#   expect(@ProjectError.general_problem.to_s).to eql(message.to_s)
-# end
-# And(/^I expect the project error possible fix (.*)$/) do |message|
-#   expect(@ProjectError.possible_fix.to_s).to eql(message.to_s)
-# end
+And(/^I expect the workspace error message (.*)$/) do |message|
+  expect(@WorkspaceError.error.to_s).to eql(message.to_s)
+end
+And(/^I expect the workspace error code (.*)$/) do |message|
+  expect(@WorkspaceError.code.to_s).to eql(message.to_s)
+end
+And(/^I expect the workspace error kind (.*)$/) do |message|
+  expect(@WorkspaceError.kind.to_s).to eql(message.to_s)
+end
+And(/^I expect the workspace error general problem (.*)$/) do |message|
+  expect(@WorkspaceError.general_problem.to_s).to eql(message.to_s)
+end
+And(/^I expect the workspace error possible fix (.*)$/) do |message|
+  expect(@WorkspaceError.possible_fix.to_s).to eql(message.to_s)
+end

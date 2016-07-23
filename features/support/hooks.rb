@@ -6,7 +6,7 @@ Before('@create_project') do
   client = ApiRestClient.new
   #create the project
 
-  json_param = {:name => "General_project_5"}
+  json_param = {:name => "General_project_TeamB"}
 
   _,$project = ProjectRequest.create_project(client,"POST",json_param.to_json)
   
@@ -21,7 +21,7 @@ end
 Before('@create_workspace') do
   client = ApiRestClient.new
   #create a workspace Ericka
-  json_param = {:name => "General_workspaceX"}
+  json_param = {:name => "General_workspaceTeamB"}
   $workspace = WorkspaceRequest.create_workspace(client,"POST",json_param)
 end
 
@@ -34,7 +34,7 @@ end
 Before('@create_story') do
   client = ApiRestClient.new
   #create the project
-  json_param = {:name => "General_bruno06"}
+  json_param = {:name => "General_storyTeamB"}
   _, $story= StoriesRequest.create_stories(client,"POST",$project.id,json_param.to_json)
 
 end
